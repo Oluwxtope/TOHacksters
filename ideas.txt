@@ -1,3 +1,2 @@
 face blurring web app
-trivia game web app
 centralized interview portal web app
