@@ -1,3 +1,7 @@
+# Helper module that assists with reading the names of each file in the people
+# and pics folders so that navigating and interacting with images within will be
+# easier in face_block.py
+
 import os
 
 def people():
