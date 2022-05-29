@@ -43,13 +43,53 @@ def face_block():
         # Display the results
         for (top, right, bottom, left), to_blur in zip(face_locations, faces_to_blur):
             if to_blur:
-                # Draw a box around the face
-                cv.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
+                # # Draw a box around the face
+                # cv.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
 
-                # Draw a label with a name below the face
-                cv.rectangle(image, (left, bottom - 35), (right, bottom), (0, 0, 255), cv.FILLED)
-                font = cv.FONT_HERSHEY_DUPLEX
-        
+                # # Draw a label with a name below the face
+                # cv.rectangle(image, (left, bottom - 35), (right, bottom), (0, 0, 255), cv.FILLED)
+                # font = cv.FONT_HERSHEY_DUPLEX
+
+                # Gaussian blur
+                # Create ROI coordinates
+                topLeft = (left, top)
+                bottomRight = (right, bottom)
+                x, y = topLeft[0], topLeft[1]
+                w, h = bottomRight[0] - topLeft[0], bottomRight[1] - topLeft[1]
+
+                '''
+                # Grab ROI with Numpy slicing and blur
+                ROI = image[y:y+h, x:x+w]
+                blur = cv.GaussianBlur(ROI, (51, 51), 0) 
+
+                # Insert ROI back into image
+                image[y:y+h, x:x+w] = blur
+
+                cv.imshow('blur', blur)
+                cv.imshow('image', image)
+                cv.waitKey()
+                '''
+                # divide the input image into NxN blocks
+                blocks = 7
+                xSteps = np.linspace(left, right, blocks + 1, dtype="int")
+                ySteps = np.linspace(top, bottom, blocks + 1, dtype="int")
+                # loop over the blocks in both the x and y direction
+                for i in range(1, len(ySteps)):
+                    for j in range(1, len(xSteps)):
+                        # compute the starting and ending (x, y)-coordinates
+                        # for the current block
+                        startX = xSteps[j - 1]
+                        startY = ySteps[i - 1]
+                        endX = xSteps[j]
+                        endY = ySteps[i]
+                        # extract the ROI using NumPy array slicing, compute the
+                        # mean of the ROI, and then draw a rectangle with the
+                        # mean RGB values over the ROI in the original image
+                        roi = image[startY:endY, startX:endX]
+                        (B, G, R) = [int(x) for x in cv.mean(roi)[:3]]
+                        cv.rectangle(image, (startX, startY), (endX, endY),
+                            (B, G, R), -1)
+
         # Display the resulting image
         cv.imshow('Image', image)
         cv.waitKey(0)
