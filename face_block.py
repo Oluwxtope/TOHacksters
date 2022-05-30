@@ -77,8 +77,8 @@ def face_block() -> None:
                         cv.rectangle(image, (startX, startY), (endX, endY), (B, G, R), -1)
         
         # display the resulting image
-        cv.imshow(pic_img, image)
-        cv.waitKey(5)
+        # cv.imshow(pic_img, image)
+        # cv.waitKey(5)
 
         # save result
         try:
