@@ -17,3 +17,8 @@ Our users who don't want their faces posted all over the internet sign up by upl
 With our team having no experience with computer vision using OpenCV or Face Recognition (except for Angel), we had to read lots of documentations and watch videos to learn how to go about building this. It was quite challenging but we did it!
 
 We also were unable to complete the front end of the project and host on a domain, record a demo video, and add the video blurring component of the app before the deadline but in the end we do have a working script that blurs peoples faces from in face_block.py and will continue rounding out the project.
+
+# Future of FaceBlock
+1. Save processed images with blurred faces to folder
+2. Increase processing time by downscaling image and then processing facial data. We will examine the tradeoff between accuracy and faster processing time quantitatively speaking
+3. Implement video face blurring

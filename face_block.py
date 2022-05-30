@@ -11,6 +11,10 @@ import numpy as np
 import read_files
 
 def face_block() -> None:
+    '''
+    face_block() indexes the faces of users in images/people and iterates thru
+    pics in images/pics blurring out the faces of users found
+    '''
     # 1. identify people that want their face blurred from the images/people folder
     known_face_encodings = [] # saves face encodings of people who want face blurred
     people = read_files.people() # get list of file names of users to blur
@@ -20,7 +24,8 @@ def face_block() -> None:
         image_encoding = face_recognition.face_encodings(rgb_image) # encode faces in image
         for encoding in image_encoding: # append each encoded face to known_face_encodings array
             known_face_encodings.append(encoding)
-
+    
+    # 2. iterate thru images/pics and blur faces of users in known_face_encodings
     faces_to_blur = [] # keeps track of faces to blur
     pics = read_files.pics() # get list of file names of pics to scan for user faces to blur
     for pic_img in pics:
@@ -28,7 +33,8 @@ def face_block() -> None:
         rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         face_locations = face_recognition.face_locations(rgb_image) # save locations of faces in image
         face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
-
+        
+        # check which faces to blur in each encoding in the image
         faces_to_blur = []
         for face_encoding in face_encodings:
             matches = face_recognition.compare_faces(known_face_encodings, face_encoding) # compare each face in pic to user faces
@@ -39,7 +45,7 @@ def face_block() -> None:
                 to_blur = True
             faces_to_blur.append(to_blur)
         
-        # Display the results
+        # pixelate their faces with blur
         for (top, right, bottom, left), to_blur in zip(face_locations, faces_to_blur):
             if to_blur:
                 # pixelated blur
@@ -64,7 +70,7 @@ def face_block() -> None:
                         cv.rectangle(image, (startX, startY), (endX, endY),
                             (B, G, R), -1)
         
-        # Display the resulting image
+        # display the resulting image
         cv.imshow('Image', image)
         cv.waitKey(0)
 
