@@ -8,28 +8,35 @@ import face_recognition
 import numpy as np
 
 # Module imports: read_files - processes the names of image files for ease of access
-import read_filenames
+import read_filename
 
 def face_block() -> None:
     '''
     face_block() indexes the faces of users in images/people and iterates thru
     pics in images/pics blurring out the faces of users found
     '''
-    # 1. identify people that want their face blurred from the images/people folder
+    # 1. create list of files to iterate thru
+    people_filepath = "images/people"
+    people_filenames = read_filename.read_filenames(people_filepath)
+    pics_filepath = "images/pics"
+    pics_filenames = read_filename.read_filenames(pics_filepath)
+    final_filepath = "images/final"
+
+    # 2. identify people that want their face blurred from the images/people folder
     known_face_encodings = [] # saves face encodings of people who want face blurred
-    people = read_filenames.people() # get list of file names of users to blur
-    for person_img in people:
-        image = cv.imread(person_img) 
+    for person_img in people_filenames:
+        person_filepath = people_filepath + "/" + person_img
+        image = cv.imread(person_filepath) 
         rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB) # covert to rgb from bgr for face_recognition package
         image_encoding = face_recognition.face_encodings(rgb_image) # encode faces in image
         for encoding in image_encoding: # append each encoded face to known_face_encodings array
             known_face_encodings.append(encoding)
     
-    # 2. iterate thru images/pics and blur faces of users in known_face_encodings
+    # 3. iterate thru images/pics and blur faces of users in known_face_encodings
     faces_to_blur = [] # keeps track of faces to blur
-    pics = read_filenames.pics() # get list of file names of pics to scan for user faces to blur
-    for pic_img in pics:
-        image = cv.imread(pic_img)
+    for pic_img in pics_filenames:
+        pic_filepath = pics_filepath + "/" + pic_img
+        image = cv.imread(pic_filepath)
         rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         face_locations = face_recognition.face_locations(rgb_image) # save locations of faces in image
         face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
@@ -67,11 +74,18 @@ def face_block() -> None:
                         # mean RGB values over the ROI in the original image
                         roi = image[startY:endY, startX:endX]
                         (B, G, R) = [int(x) for x in cv.mean(roi)[:3]]
-                        cv.rectangle(image, (startX, startY), (endX, endY),
-                            (B, G, R), -1)
+                        cv.rectangle(image, (startX, startY), (endX, endY), (B, G, R), -1)
         
         # display the resulting image
-        cv.imshow('Image', image)
-        cv.waitKey(0)
+        cv.imshow(pic_img, image)
+        cv.waitKey(5)
+
+        # save result
+        try:
+            saved = cv.imwrite(final_filepath + "/" + pic_img, image)
+            print(pic_img + " was processed and saved successfully.")
+        except:
+            print("ERROR: " + pic_img + " wasn't saved!")
+            continue
 
 face_block()

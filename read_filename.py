@@ -15,8 +15,9 @@ def read_filenames(folder: str) -> list[str]:
     '''
     filenames = []
     for file in os.listdir(folder):
-        filenames.append(file)
+        if file[0] != ".":
+            filenames.append(file)
     return filenames
 
 # tests
-print(read_filenames("images/people"))
+# print(read_filenames("images/people"))
