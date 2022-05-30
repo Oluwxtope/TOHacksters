@@ -10,16 +10,16 @@ Our users who don't want their faces posted all over the internet sign up by upl
 
 # How we built it
 
-1. We encode the faces of every user in our database and store these encodings
-2. When we receive a bunch of photos/videos from an organizer who is privacy conscious, we process each of the uploads and search for our users' faces in them
+1. We encode the faces of every user in our database and store these encodings  
+2. When we receive a bunch of photos/videos from an organizer who is privacy conscious, we process each of the uploads and search for our users' faces in them  
 3. If we find any of our users, we blur them out and it's like they were never there! (with over ~90% accuracy in our tests*)  
-\* Tests conducted on professionally captured images with near-perfect lighting and on white people
-<br>
+   \* Tests conducted on professionally captured images with near-perfect lighting and on white people
 
 # Future of FaceBlock
+
 1. Improve accurary of face scanning and blurring. Current known issues are:  
-   Difficulty detecting faces identified if face is obstructed by accessory ie glasses  
-   Difficulty detecting faces identified if image has low lighting  
-   Can sometimes confuse faces especially with black people  
+   - Difficulty detecting faces identified if face is obstructed by accessory ie glasses  
+   - Difficulty detecting faces identified if image has low lighting  
+   - Can sometimes confuse faces especially with black people  
 2. Reduce processing time by downscaling image and then processing facial data. We will have to examine the tradeoff between accuracy and faster processing time quantitatively  
 3. Implement video face blurring
