@@ -8,7 +8,7 @@ import face_recognition
 import numpy as np
 
 # Module imports: read_files - processes the names of image files for ease of access
-import read_files
+import read_filenames
 
 def face_block() -> None:
     '''
@@ -17,7 +17,7 @@ def face_block() -> None:
     '''
     # 1. identify people that want their face blurred from the images/people folder
     known_face_encodings = [] # saves face encodings of people who want face blurred
-    people = read_files.people() # get list of file names of users to blur
+    people = read_filenames.people() # get list of file names of users to blur
     for person_img in people:
         image = cv.imread(person_img) 
         rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB) # covert to rgb from bgr for face_recognition package
@@ -27,7 +27,7 @@ def face_block() -> None:
     
     # 2. iterate thru images/pics and blur faces of users in known_face_encodings
     faces_to_blur = [] # keeps track of faces to blur
-    pics = read_files.pics() # get list of file names of pics to scan for user faces to blur
+    pics = read_filenames.pics() # get list of file names of pics to scan for user faces to blur
     for pic_img in pics:
         image = cv.imread(pic_img)
         rgb_image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
